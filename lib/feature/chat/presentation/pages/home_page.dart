@@ -50,7 +50,7 @@ class _HomePageState extends State<HomePage> {
         body: Column(
           children: [
             Container(
-              width: double.infinity,
+              width: double.infinity, // double.infinity
               padding: EdgeInsets.symmetric(vertical: 40, horizontal: 20),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
