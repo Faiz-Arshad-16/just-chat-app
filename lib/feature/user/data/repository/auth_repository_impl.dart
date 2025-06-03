@@ -30,10 +30,10 @@ class AuthRepositoryImpl implements AuthRepository {
       } on AuthException catch (e) {
         return Left(AuthFailure(e.message));
       } catch (e) {
-        return Left(ServerFailure('An unexpected error occurred during sign in.'));
+        return const Left(ServerFailure('An unexpected error occurred during sign in.'));
       }
     } else {
-      return Left(NoInternetFailure());
+      return const Left(NoInternetFailure());
     }
   }
 
@@ -48,10 +48,10 @@ class AuthRepositoryImpl implements AuthRepository {
       } on AuthException catch (e) {
         return Left(AuthFailure(e.message));
       } catch (e) {
-        return Left(ServerFailure('An unexpected error occurred during sign up.'));
+        return const Left(ServerFailure('An unexpected error occurred during sign up.'));
       }
     } else {
-      return Left(NoInternetFailure());
+      return const Left(NoInternetFailure());
     }
   }
 
@@ -65,7 +65,7 @@ class AuthRepositoryImpl implements AuthRepository {
     } on ServerException catch (e) {
       return Left(ServerFailure(e.message));
     } catch (e) {
-      return Left(ServerFailure('An unexpected error occurred during sign out.'));
+      return const Left(ServerFailure('An unexpected error occurred during sign out.'));
     }
   }
 
@@ -74,7 +74,7 @@ class AuthRepositoryImpl implements AuthRepository {
     try {
       final token = await localDataSource.getToken();
       if (token == null) {
-        return Left(AuthFailure('No authentication token found'));
+        return const Left(AuthFailure('No authentication token found'));
       }
 
       if (await networkInfo.isConnected) {
@@ -88,20 +88,20 @@ class AuthRepositoryImpl implements AuthRepository {
           await localDataSource.clearUserCache();
           return Left(AuthFailure(e.message));
         } catch (e) {
-          return Left(ServerFailure('An unexpected error occurred during remote profile fetch.'));
+          return const Left(ServerFailure('An unexpected error occurred during remote profile fetch.'));
         }
       } else {
         try {
           final localUser = await localDataSource.getUser();
           return Right(localUser);
         } on CacheException {
-          return Left(NoInternetFailure());
+          return const Left(NoInternetFailure());
         }
       }
     } on CacheException {
-      return Left(CacheFailure('No cached user data available'));
+      return const Left(CacheFailure('No cached user data available'));
     } catch (e) {
-      return Left(ServerFailure('An unexpected error occurred while getting user profile.'));
+      return const Left(ServerFailure('An unexpected error occurred while getting user profile.'));
     }
   }
 
@@ -117,7 +117,7 @@ class AuthRepositoryImpl implements AuthRepository {
         return Left(AuthFailure(e.message));
       }
     } else {
-      return Left(NoInternetFailure());
+      return const Left(NoInternetFailure());
     }
   }
 

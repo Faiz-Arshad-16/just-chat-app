@@ -53,7 +53,7 @@ class _NameTextFieldState extends State<NameTextField> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 20),
+      margin: const EdgeInsets.symmetric(horizontal: 20),
       width: double.infinity,
       child: TextFormField(
         controller: _controller,
@@ -66,7 +66,7 @@ class _NameTextFieldState extends State<NameTextField> {
         cursorColor: Colors.white,
         cursorOpacityAnimates: true,
         decoration: InputDecoration(
-          contentPadding: EdgeInsets.symmetric(horizontal: 25, vertical: 15),
+          contentPadding: const EdgeInsets.symmetric(horizontal: 25, vertical: 15),
           hintText: widget.isFirstName ? "First name" : "Last name",
           hintStyle: GoogleFonts.comfortaa(
             color: AppColors.secondaryTextColor,
@@ -76,7 +76,7 @@ class _NameTextFieldState extends State<NameTextField> {
           fillColor: AppColors.appBarColor,
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(30),
-            borderSide: BorderSide(width: 3, color: AppColors.sendMessageColor),
+            borderSide: const BorderSide(width: 3, color: AppColors.sendMessageColor),
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(30),
@@ -84,7 +84,7 @@ class _NameTextFieldState extends State<NameTextField> {
           ),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(30),
-            borderSide: BorderSide(width: 3, color: AppColors.sendMessageColor),
+            borderSide: const BorderSide(width: 3, color: AppColors.sendMessageColor),
           ),
           errorBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(30),

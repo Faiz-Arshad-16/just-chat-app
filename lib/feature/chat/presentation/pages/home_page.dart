@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../../../app/const/chat_list_model.dart';
+import 'package:just_chat_app/feature/chat/domain/entity/chat_entity.dart';
+import 'package:just_chat_app/feature/chat/presentation/chat_cubit/chat_cubit.dart';
 import '../../../app/routes/on_generate_route.dart';
 import '../../../app/theme/style.dart';
 import '../../../user/presentation/cubit/user_cubit/user_cubit.dart';
@@ -18,12 +19,14 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final TextEditingController _searchController = TextEditingController();
 
-  List<Chat> get filteredChats {
+  List<ChatEntity> get filteredChats {
+    final state = context.read<ChatCubit>().state;
+    final chats = state.chats;
     if (_searchController.text.isEmpty) {
-      return allChats;
+      return chats;
     } else {
-      return allChats.where((chat) {
-        return chat.name.toLowerCase().contains(
+      return chats.where((chat) {
+        return chat.partnerName.toLowerCase().contains(
           _searchController.text.toLowerCase(),
         );
       }).toList();
@@ -34,6 +37,7 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     context.read<UserCubit>().fetchUser();
+    context.read<ChatCubit>().fetchAllChats();
   }
 
   @override
@@ -51,7 +55,7 @@ class _HomePageState extends State<HomePage> {
           children: [
             Container(
               width: double.infinity,
-              padding: EdgeInsets.symmetric(vertical: 40, horizontal: 20),
+              padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 20),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -99,24 +103,23 @@ class _HomePageState extends State<HomePage> {
                           ),
                           child: IconButton(
                               onPressed: () {},
-                              icon: Icon(
+                              icon: const Icon(
                                 Icons.add,
                                 color: AppColors.textColor,
                               )
                           )
                       ),
-                      SizedBox(width: 20,),
+                      const SizedBox(width: 20,),
                       GestureDetector(
-                        behavior: HitTestBehavior.opaque,
                         onTap: () {
-                          Navigator.pushNamed(context, PageConst.profile).then((_) {});
+                          Navigator.pushNamed(context, PageConst.profile);
                         },
                         child: BlocBuilder<UserCubit, UserState>(
                           builder: (context, state) {
                             String? profilePicUrl;
                             String username = 'User';
                             if (state is UserLoading) {
-                              return CircleAvatar(
+                              return const CircleAvatar(
                                 radius: 25,
                                 backgroundColor: Colors.white,
                                 child: CircularProgressIndicator(color: AppColors.textColor),
@@ -152,26 +155,42 @@ class _HomePageState extends State<HomePage> {
                 ],
               ),
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             ChatSearchBar(
               controller: _searchController,
               onChanged: (value) {
                 setState(() {});
               },
             ),
-            SizedBox(height: 30),
+            const SizedBox(height: 30),
             Expanded(
               child: Container(
-                padding: EdgeInsets.only(top: 15),
+                padding: const EdgeInsets.only(top: 15),
                 width: double.infinity,
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   color: AppColors.backgroundColor,
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(25),
                     topRight: Radius.circular(25),
                   ),
                 ),
-                child: _buildChatContent(),
+                child: BlocConsumer<ChatCubit, ChatState>(
+                  listener: (context, state) {
+                    if(state is ChatError){
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text(state.message)),
+                      );
+                    }
+                    },
+                  builder: (context, state) {
+                    if(state is ChatLoading){
+                      return const Center(child: CircularProgressIndicator(),);
+                    } else if(state is ChatLoaded){
+                      return _buildChatContent();
+                    }
+                    return _buildChatContent();
+                    },
+                ),
               ),
             ),
           ],
@@ -216,3 +235,4 @@ class _HomePageState extends State<HomePage> {
     );
   }
 }
+

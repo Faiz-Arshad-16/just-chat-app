@@ -111,7 +111,7 @@ class _SignupPageState extends State<SignupPage> {
                             context.read<AuthCubit>().signup(_email, _password, '$_firstName $_lastName');
                           }
                         },
-                        child: isLoading ? CircularProgressIndicator() : Text(
+                        child: isLoading ? const CircularProgressIndicator() : Text(
                           "Create account",
                           style: GoogleFonts.comfortaa(
                             fontSize: 20,
@@ -122,7 +122,7 @@ class _SignupPageState extends State<SignupPage> {
                       }
                     ),
                   ),
-                  SizedBox(height: 130),
+                  const SizedBox(height: 130),
                   RichText(
                     text: TextSpan(
                       text: "Already have an account?",

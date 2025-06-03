@@ -1,117 +1,18 @@
-//
-// import 'package:flutter/material.dart';
-// import 'package:google_fonts/google_fonts.dart';
-//
-// import '../../../app/const/chat_list_model.dart';
-// import '../../../app/routes/on_generate_route.dart';
-// import '../../../app/theme/style.dart';
-//
-// class ChatListGenerate extends StatelessWidget {
-//   final List<Chat> chats;
-//   const ChatListGenerate({super.key, required this.chats});
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return ListView.builder(
-//       physics: BouncingScrollPhysics(),
-//       itemCount: chats.length,
-//       itemBuilder: (context, index) {
-//         final chat = chats[index];
-//         return _buildChatList(context, chat);
-//       },
-//     );
-//   }
-//
-//   Widget _buildChatList(BuildContext context, Chat chat) {
-//     return GestureDetector(
-//       onTap: (){
-//         Navigator.pushNamed(context, PageConst.chats, arguments: chat);
-//       },
-//       child: Column(
-//         mainAxisAlignment: MainAxisAlignment.start,
-//         children: [
-//           Padding(
-//             padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-//             child: Row(
-//               mainAxisAlignment: MainAxisAlignment.start,
-//               children: [
-//                 CircleAvatar(
-//                   radius: 25,
-//                   backgroundColor: appBarColor,
-//                   child: Text(
-//                     chat.name.isNotEmpty ? chat.name[0].toUpperCase() : '?',
-//                     style: GoogleFonts.comfortaa(
-//                       fontSize: 18,
-//                       fontWeight: FontWeight.bold,
-//                       color: Colors.white,
-//                     ),
-//                   ),
-//                 ),
-//                 SizedBox(width: 10,),
-//                 Expanded(
-//                   child: Column(
-//                     mainAxisAlignment: MainAxisAlignment.start,
-//                     crossAxisAlignment: CrossAxisAlignment.start,
-//                     children: [
-//                       Text(
-//                         chat.name,
-//                         style: GoogleFonts.comfortaa(
-//                           fontSize: 17,
-//                           fontWeight: FontWeight.w500,
-//                           color: textColor,
-//                         ),
-//                       ),
-//                       Text(
-//                         chat.lastMessage.isEmpty || chat.lastMessage == '' ? 'No message yet' : chat.lastMessage,
-//                         softWrap: true,
-//                         maxLines: 1,
-//                         overflow: TextOverflow.ellipsis,
-//                         style: GoogleFonts.comfortaa(
-//                           fontSize: 13,
-//                           fontWeight: FontWeight.w500,
-//                           color: secondaryTextColor,
-//                         ),
-//                       )
-//                     ],
-//                   ),
-//                 ),
-//                 Text(
-//                   chat.lastMessageTime,
-//                   style: GoogleFonts.comfortaa(
-//                     fontSize: 11,
-//                     color: secondaryTextColor,
-//                   ),
-//                 ),
-//               ],
-//             ),
-//           ),
-//           SizedBox(height: 5,),
-//           Container(
-//             width: double.infinity,
-//             height: 1,
-//             color: secondaryTextColor.withOpacity(0.5),
-//           )
-//         ],
-//       ),
-//     );
-//   }
-// }
-//
-
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../../../app/const/chat_list_model.dart';
+import 'package:intl/intl.dart';
+import 'package:just_chat_app/feature/chat/domain/entity/chat_entity.dart';
 import '../../../app/routes/on_generate_route.dart';
 import '../../../app/theme/style.dart';
 
 class ChatListGenerate extends StatelessWidget {
-  final List<Chat> chats;
+  final List<ChatEntity> chats;
   const ChatListGenerate({super.key, required this.chats});
 
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-      physics: BouncingScrollPhysics(),
+      physics: const BouncingScrollPhysics(),
       itemCount: chats.length,
       itemBuilder: (context, index) {
         final chat = chats[index];
@@ -120,7 +21,7 @@ class ChatListGenerate extends StatelessWidget {
     );
   }
 
-  Widget _buildChatList(BuildContext context, Chat chat) {
+  Widget _buildChatList(BuildContext context, ChatEntity chat) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
@@ -129,32 +30,37 @@ class ChatListGenerate extends StatelessWidget {
             Navigator.pushNamed(context, PageConst.chats, arguments: chat);
           },
           child: Container(
-            color: Colors.transparent, // Ensure entire area is tappable
+            color: Colors.transparent,
             child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   CircleAvatar(
                     radius: 25,
                     backgroundColor: AppColors.appBarColor,
-                    child: Text(
-                      chat.name.isNotEmpty ? chat.name[0].toUpperCase() : '?',
+                    child: chat.partnerProfilePic == null ? Text(
+                      chat.partnerName.isNotEmpty ? chat.partnerName[0].toUpperCase() : '?',
                       style: GoogleFonts.comfortaa(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
                         color: Colors.white,
                       ),
-                    ),
+                    )
+                    : Image.network(
+                    chat.partnerProfilePic!,
+                    width: 45,
+                    height: 45,
+                    fit: BoxFit.cover,),
                   ),
-                  SizedBox(width: 10),
+                  const SizedBox(width: 10),
                   Expanded(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          chat.name,
+                          chat.partnerName,
                           style: GoogleFonts.comfortaa(
                             fontSize: 17,
                             fontWeight: FontWeight.w500,
@@ -162,7 +68,7 @@ class ChatListGenerate extends StatelessWidget {
                           ),
                         ),
                         Text(
-                          chat.lastMessage,
+                          chat.lastMessage?.content ?? "No messages yet",
                           softWrap: true,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
@@ -176,7 +82,7 @@ class ChatListGenerate extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    chat.lastMessageTime,
+                    _formatLastMessageTime(chat.lastMessage?.createdAt),
                     style: GoogleFonts.comfortaa(
                       fontSize: 11,
                       color: AppColors.secondaryTextColor,
@@ -190,5 +96,17 @@ class ChatListGenerate extends StatelessWidget {
         Divider(color: AppColors.secondaryTextColor.withOpacity(0.5)),
       ],
     );
+  }
+  String _formatLastMessageTime(DateTime? timestamp) {
+    if (timestamp == null) return '';
+    final now = DateTime.now();
+    final difference = now.difference(timestamp);
+    if (difference.inDays == 0) {
+      return DateFormat('HH:mm').format(timestamp);
+    } else if (difference.inDays < 7) {
+      return DateFormat('EEE').format(timestamp);
+    } else {
+      return DateFormat('MM/dd').format(timestamp);
+    }
   }
 }

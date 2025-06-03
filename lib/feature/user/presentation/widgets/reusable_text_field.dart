@@ -47,7 +47,7 @@ class _ReusableTextFieldState extends State<ReusableTextField> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 20),
+      margin: const EdgeInsets.symmetric(horizontal: 20),
       width: double.infinity,
       child: TextFormField(
         controller: _controller,
@@ -60,7 +60,7 @@ class _ReusableTextFieldState extends State<ReusableTextField> {
         cursorColor: Colors.white,
         cursorOpacityAnimates: true,
         decoration: InputDecoration(
-          contentPadding: EdgeInsets.symmetric(horizontal: 25, vertical: 15),
+          contentPadding: const EdgeInsets.symmetric(horizontal: 25, vertical: 15),
           hintText: widget.isEmail ? "Email" : "Password",
           hintStyle: GoogleFonts.comfortaa(
             color: AppColors.secondaryTextColor,
@@ -70,7 +70,7 @@ class _ReusableTextFieldState extends State<ReusableTextField> {
           fillColor: AppColors.appBarColor,
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(30),
-            borderSide: BorderSide(width: 3, color: AppColors.sendMessageColor),
+            borderSide: const BorderSide(width: 3, color: AppColors.sendMessageColor),
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(30),
@@ -78,7 +78,7 @@ class _ReusableTextFieldState extends State<ReusableTextField> {
           ),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(30),
-            borderSide: BorderSide(width: 3, color: AppColors.sendMessageColor),
+            borderSide: const BorderSide(width: 3, color: AppColors.sendMessageColor),
           ),
           errorBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(30),

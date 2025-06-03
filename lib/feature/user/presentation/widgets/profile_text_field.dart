@@ -59,7 +59,7 @@ class _ProfileTextFieldState extends State<ProfileTextField> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 20),
+      margin: const EdgeInsets.symmetric(horizontal: 20),
       width: double.infinity,
       child: TextFormField(
         controller: _controller,
@@ -71,7 +71,7 @@ class _ProfileTextFieldState extends State<ProfileTextField> {
         cursorColor: Colors.white,
         cursorOpacityAnimates: true,
         decoration: InputDecoration(
-          contentPadding: EdgeInsets.symmetric(horizontal: 25, vertical: 15),
+          contentPadding: const EdgeInsets.symmetric(horizontal: 25, vertical: 15),
           suffixIcon: widget.suffixIcon,
           hintText: widget.hintText,
           hintStyle: GoogleFonts.comfortaa(
@@ -82,7 +82,7 @@ class _ProfileTextFieldState extends State<ProfileTextField> {
           fillColor: AppColors.appBarColor,
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(30),
-            borderSide: BorderSide(width: 3, color: AppColors.sendMessageColor),
+            borderSide: const BorderSide(width: 3, color: AppColors.sendMessageColor),
           ),
           errorBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(30),
