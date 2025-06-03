@@ -1,8 +1,5 @@
-import 'package:shared_preferences/shared_preferences.dart';
-
 import '../../../../core/errors/exceptions.dart';
 import '../../domain/entity/user_entity.dart';
-import '../data_sources/local_data_source/auth_local_data_source_impl.dart';
 
 class UserModel extends UserEntity {
   const UserModel({
@@ -28,21 +25,6 @@ class UserModel extends UserEntity {
           : null,
     );
   }
-
-  // factory UserModel.fromProfileJson(Map<String, dynamic> json, {String? accessToken, String? id}) {
-  //   final userData = json['data'] as Map<String, dynamic>;
-  //   return UserModel(
-  //     id: userData['id'] as String ?? "",
-  //     name: userData['name'] as String,
-  //     email: userData['email'] as String,
-  //     accessToken: accessToken ?? '',
-  //     image: userData['image'] as String?,
-  //     createdAt: DateTime.parse(userData['createdAt'] as String),
-  //     updatedAt: userData['updatedAt'] != null
-  //         ? DateTime.parse(userData['updatedAt'] as String)
-  //         : null,
-  //   );
-  // }
 
   factory UserModel.fromProfileJson(Map<String, dynamic> json, {String? accessToken, String? id}) {
     final userData = json['data'] as Map<String, dynamic>;

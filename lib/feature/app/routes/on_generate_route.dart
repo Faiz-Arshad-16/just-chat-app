@@ -1,6 +1,7 @@
 // lib/feature/app/routes/on_generate_route.dart
 
 import 'package:flutter/material.dart';
+import 'package:just_chat_app/feature/chat/domain/entity/chat_entity.dart';
 // Corrected import path for SplashScreen if it moved or was always there.
 import 'package:just_chat_app/feature/user/presentation/pages/splash_screen.dart'; // Ensure this path is correct
 
@@ -41,7 +42,7 @@ class OnGenerateRoute {
       case PageConst.home:
         return MaterialPageRoute(builder: (_) => const HomePage()); // Added const
       case PageConst.chats:
-        if (args is Chat) {
+        if (args is ChatEntity) {
           return MaterialPageRoute(builder: (_) => ChatConversationPage(chat: args));
         } else {
           return MaterialPageRoute(builder: (_) => const ErrorPage()); // Added const

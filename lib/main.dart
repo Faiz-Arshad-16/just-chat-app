@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:just_chat_app/feature/chat/domain/usecases/get_all_chats.dart';
+import 'package:just_chat_app/feature/chat/domain/usecases/get_chat.dart';
+import 'package:just_chat_app/feature/chat/presentation/chat_cubit/chat_cubit.dart';
 import 'package:just_chat_app/feature/user/data/data_sources/local_data_source/auth_local_data_source.dart';
 import 'package:just_chat_app/feature/user/domain/usecases/auth_usecases/update_user.dart';
 import 'package:just_chat_app/feature/user/presentation/cubit/auth_cubit/auth_cubit.dart';
@@ -32,6 +35,7 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   late final AuthCubit _authCubit;
   late final UserCubit _userCubit;
+  late final ChatCubit _chatCubit;
 
   @override
   void initState() {
@@ -48,6 +52,7 @@ class _MyAppState extends State<MyApp> {
       localDataSource: di.sl<AuthLocalDataSource>(),
       updateUserUsecase: di.sl<UpdateUser>(),
     );
+    _chatCubit = ChatCubit(getAllChatsUseCase: di.sl<GetAllChats>(), getChatUseCase: di.sl<GetChat>());
   }
 
   @override
@@ -63,6 +68,7 @@ class _MyAppState extends State<MyApp> {
       providers: [
         BlocProvider<AuthCubit>.value(value: _authCubit),
         BlocProvider<UserCubit>.value(value: _userCubit),
+        BlocProvider<ChatCubit>.value(value: _chatCubit,),
       ],
       child: MaterialApp(
         title: 'Just Chat',

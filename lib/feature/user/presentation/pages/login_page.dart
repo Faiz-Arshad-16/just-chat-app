@@ -45,7 +45,7 @@ class _LoginPageState extends State<LoginPage> {
                       color: AppColors.textColor,
                     ),
                   ),
-                  SizedBox(height: 80),
+                  const SizedBox(height: 80),
                   Text(
                     "Please login to continue",
                     style: GoogleFonts.comfortaa(
@@ -53,7 +53,7 @@ class _LoginPageState extends State<LoginPage> {
                       color: AppColors.secondaryTextColor,
                     ),
                   ),
-                  SizedBox(height: 40),
+                  const SizedBox(height: 40),
                   ReusableTextField(
                     isEmail: true,
                     onChanged:
@@ -61,7 +61,7 @@ class _LoginPageState extends State<LoginPage> {
                           _email = value;
                         }),
                   ),
-                  SizedBox(height: 30),
+                  const SizedBox(height: 30),
                   ReusableTextField(
                     isEmail: false,
                     onChanged:
@@ -69,9 +69,9 @@ class _LoginPageState extends State<LoginPage> {
                           _password = value;
                         }),
                   ),
-                  SizedBox(height: 40),
+                  const SizedBox(height: 40),
                   Container(
-                    padding: EdgeInsets.symmetric(horizontal: 20),
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
                     width: double.infinity,
                     height: 50,
                     child: BlocConsumer<AuthCubit, AuthState>(
@@ -92,7 +92,7 @@ class _LoginPageState extends State<LoginPage> {
                             context.read<AuthCubit>().login(_email, _password);
                           }
                         },
-                        child: isLoading ? CircularProgressIndicator() : Text(
+                        child: isLoading ? const CircularProgressIndicator() : Text(
                           "Login",
                           style: GoogleFonts.comfortaa(
                             fontSize: 20,
@@ -103,7 +103,7 @@ class _LoginPageState extends State<LoginPage> {
                       }
                     ),
                   ),
-                  SizedBox(height: 130), // Responsive spacing
+                  const SizedBox(height: 130), // Responsive spacing
                   RichText(
                     text: TextSpan(
                       text: "Don't have an account?",

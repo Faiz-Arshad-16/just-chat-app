@@ -46,13 +46,13 @@ class _ProfilePageState extends State<ProfilePage> {
                     color: AppColors.backgroundColor,
                   ),
                   child: IconButton(
-                    icon: Icon(Icons.arrow_back, color: AppColors.textColor),
+                    icon: const Icon(Icons.arrow_back, color: AppColors.textColor),
                     onPressed: () {
                       Navigator.pop(context);
                     },
                   ),
                 ),
-                SizedBox(width: 15),
+                const SizedBox(width: 15),
                 Text(
                   "Profile Settings",
                   style: GoogleFonts.comfortaa(
@@ -68,7 +68,7 @@ class _ProfilePageState extends State<ProfilePage> {
             child: Container(
               width: double.infinity,
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 color: AppColors.backgroundColor,
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(25),
@@ -100,7 +100,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       email = state.email;
                       profilePicUrl = state.image;
                     } else if(state is UserLoading && !isUpdating){
-                      return Center(
+                      return const Center(
                         child: CircularProgressIndicator(),
                       );
                     } else if(state is UserError && !isUpdating){
@@ -158,7 +158,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                 : _buildDefaultAvatar(username),
                           ),
                         ),
-                        SizedBox(height: 15),
+                        const SizedBox(height: 15),
                         Text(
                           // "Edit profile picture",
                           username,
@@ -168,7 +168,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             color: AppColors.textColor,
                           ),
                         ),
-                        SizedBox(height: 40),
+                        const SizedBox(height: 40),
                         ProfileTextField(
                           suffixIcon: IconButton(
                               onPressed: (){
@@ -192,11 +192,11 @@ class _ProfilePageState extends State<ProfilePage> {
                                   ),
                                 );
                               },
-                              icon: Icon(
+                              icon: const Icon(
                                   Icons.edit,
                                 color: AppColors.textColor,
                               ),
-                            padding: EdgeInsets.symmetric(horizontal: 20),
+                            padding: const EdgeInsets.symmetric(horizontal: 20),
                           ),
                           hintText: "Username",
                           initialValue: username,
@@ -205,13 +205,13 @@ class _ProfilePageState extends State<ProfilePage> {
                             print('Username input: $value');
                           },
                         ),
-                        SizedBox(height: 30),
+                        const SizedBox(height: 30),
                         ProfileTextField(
                           hintText: "Email",
                           initialValue: email,
                           isEditable: false,
                         ),
-                        SizedBox(height: 30),
+                        const SizedBox(height: 30),
                         ProfileTextField(
                           hintText: "Change Password",
                           isEditable: false,
@@ -230,16 +230,16 @@ class _ProfilePageState extends State<ProfilePage> {
                                 ),
                               );
                             },
-                            icon: Icon(
+                            icon: const Icon(
                               Icons.edit,
                               color: AppColors.textColor,
                             ),
-                            padding: EdgeInsets.symmetric(horizontal: 20),
+                            padding: const EdgeInsets.symmetric(horizontal: 20),
                           ),
                         ),
-                        SizedBox(height: 40),
+                        const SizedBox(height: 40),
                         Container(
-                          padding: EdgeInsets.symmetric(horizontal: 20),
+                          padding: const EdgeInsets.symmetric(horizontal: 20),
                           width: double.infinity,
                           child: BlocConsumer<AuthCubit, AuthState>(
                             listener: (context, state) {
@@ -264,12 +264,12 @@ class _ProfilePageState extends State<ProfilePage> {
                               },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: AppColors.sendMessageColor,
-                                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(30),
                                 ),
                               ),
-                              child: isLoading ? CircularProgressIndicator() : Text(
+                              child: isLoading ? const CircularProgressIndicator() : Text(
                                 "Logout",
                                 style: GoogleFonts.comfortaa(
                                   fontSize: 20,
