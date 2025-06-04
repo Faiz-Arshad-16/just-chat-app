@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:just_chat_app/feature/chat/domain/usecases/delete_message.dart';
 import 'package:just_chat_app/feature/chat/domain/usecases/get_all_chats.dart';
 import 'package:just_chat_app/feature/chat/domain/usecases/get_chat.dart';
+import 'package:just_chat_app/feature/chat/domain/usecases/mark_messages_as_read.dart';
 import 'package:just_chat_app/feature/chat/presentation/chat_cubit/chat_cubit.dart';
 import 'package:just_chat_app/feature/user/data/data_sources/local_data_source/auth_local_data_source.dart';
 import 'package:just_chat_app/feature/user/domain/usecases/auth_usecases/update_user.dart';
@@ -11,6 +13,7 @@ import 'package:just_chat_app/feature/user/presentation/cubit/user_cubit/user_cu
 import 'package:just_chat_app/core/di/main_injection_container.dart' as di;
 import 'package:just_chat_app/feature/app/routes/on_generate_route.dart';
 import 'package:just_chat_app/feature/app/theme/style.dart';
+import 'feature/chat/domain/usecases/delete_chat.dart';
 import 'feature/user/domain/usecases/auth_usecases/get_user.dart';
 import 'feature/user/domain/usecases/auth_usecases/sign_in.dart';
 import 'feature/user/domain/usecases/auth_usecases/sign_out.dart';
@@ -52,7 +55,13 @@ class _MyAppState extends State<MyApp> {
       localDataSource: di.sl<AuthLocalDataSource>(),
       updateUserUsecase: di.sl<UpdateUser>(),
     );
-    _chatCubit = ChatCubit(getAllChatsUseCase: di.sl<GetAllChats>(), getChatUseCase: di.sl<GetChat>());
+    _chatCubit = ChatCubit(
+      getAllChatsUseCase: di.sl<GetAllChats>(),
+      getChatUseCase: di.sl<GetChat>(),
+      deleteChatUseCase: di.sl<DeleteChat>(),
+      deleteMessageUseCase: di.sl<DeleteMessage>(),
+      markMessagesAsReadUseCase: di.sl<MarkMessagesAsRead>(),
+    );
   }
 
   @override

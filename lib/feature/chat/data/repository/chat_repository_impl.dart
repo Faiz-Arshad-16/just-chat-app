@@ -37,4 +37,40 @@ class ChatRepositoryImpl implements ChatRepository {
       return Left(AuthFailure(e.message));
     }
   }
+
+  @override
+  Future<Either<Failure, void>> deleteChat(String chatGroupId) async {
+    try {
+      await remoteDataSource.deleteChat(chatGroupId);
+      return const Right(null);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(e.message));
+    } on AuthException catch (e) {
+      return Left(AuthFailure(e.message));
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> deleteMessage(String id) async {
+    try {
+      await remoteDataSource.deleteMessage(id);
+      return const Right(null);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(e.message));
+    } on AuthException catch (e) {
+      return Left(AuthFailure(e.message));
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> markMessagesAsRead(String chatGroupId) async {
+    try {
+      await remoteDataSource.markMessagesAsRead(chatGroupId);
+      return const Right(null);
+    } on ServerException catch (e) {
+      return Left(ServerFailure(e.message));
+    } catch (e) {
+      return Left(ServerFailure(e.toString()));
+    }
+  }
 }
