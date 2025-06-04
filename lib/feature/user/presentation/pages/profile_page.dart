@@ -117,10 +117,8 @@ class _ProfilePageState extends State<ProfilePage> {
                     return Column(
                       children: [
                         GestureDetector(
-                          behavior: HitTestBehavior.opaque,
-                          // onTap: profilePic,
                           onTap: () {
-                            // Placeholder for profile picture update functionality
+                            _updateProfilePic(context);
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(content: Text('Profile picture update coming soon')),
                             );
@@ -128,21 +126,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           child: CircleAvatar(
                             radius: 70,
                             backgroundColor: Colors.white,
-                            child:
-                            // _profilePicPath != null
-                            //     ? ClipRRect(
-                            //   borderRadius: BorderRadius.circular(70),
-                            //   child: Image.file(
-                            //     File(_profilePicPath!),
-                            //     width: 130,
-                            //     height: 130,
-                            //     fit: BoxFit.cover,
-                            //     errorBuilder: (context, error, stackTrace) {
-                            //       return _buildDefaultAvatar(username);
-                            //     },
-                            //   ),
-                            // )
-                            profilePicUrl != null
+                            child: profilePicUrl != null
                                 ? ClipRRect(
                               borderRadius: BorderRadius.circular(70),
                               child: Image.network(
@@ -160,7 +144,6 @@ class _ProfilePageState extends State<ProfilePage> {
                         ),
                         const SizedBox(height: 15),
                         Text(
-                          // "Edit profile picture",
                           username,
                           style: GoogleFonts.comfortaa(
                             fontSize: 20,
@@ -249,9 +232,9 @@ class _ProfilePageState extends State<ProfilePage> {
                                         (Route<dynamic> route) => false,
                                 );
                               } else if (state is AuthError) {
-                                // Display error message
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(content: Text(state.message)),
+                                navigatorKey.currentState!.pushNamedAndRemoveUntil(
+                                  PageConst.login,
+                                      (Route<dynamic> route) => false,
                                 );
                               }
                             },
@@ -313,191 +296,93 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  // void _showPasswordChangeDialog(BuildContext context) {
-  //   showDialog(
-  //     context: context,
-  //     builder: (context) {
-  //       String? currentPassword;
-  //       String? newPassword;
-  //       String? confirmPassword;
-  //       final formKey = GlobalKey<FormState>();
-  //
-  //       return AlertDialog(
-  //         backgroundColor: AppColors.backgroundColor,
-  //         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-  //         title: Text(
-  //           'Change Password',
-  //           style: GoogleFonts.comfortaa(
-  //             fontSize: 20,
-  //             fontWeight: FontWeight.bold,
-  //             color: AppColors.textColor,
-  //           ),
-  //         ),
-  //         content: Form(
-  //           key: formKey,
-  //           child: SingleChildScrollView(
-  //             child: Column(
-  //               mainAxisSize: MainAxisSize.min,
-  //               children: [
-  //                 ProfileTextField(
-  //                   hintText: 'Current Password',
-  //                   isPassword: true,
-  //                   onChanged: (value) => currentPassword = value,
-  //                   validator: (value) {
-  //                     if (value == null || value.trim().isEmpty) {
-  //                       return 'Please enter current password';
-  //                     }
-  //                     return null;
-  //                   },
-  //                 ),
-  //                 const SizedBox(height: 15),
-  //                 ProfileTextField(
-  //                   hintText: 'New Password',
-  //                   isPassword: true,
-  //                   onChanged: (value) => newPassword = value,
-  //                   validator: (value) {
-  //                     if (value == null || value.trim().isEmpty) {
-  //                       return 'Please enter a new password';
-  //                     }
-  //                     const passwordPattern = r'^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$';
-  //                     final regex = RegExp(passwordPattern);
-  //                     if (!regex.hasMatch(value.trim())) {
-  //                       return 'Password must be 8+ characters with letters and numbers';
-  //                     }
-  //                     return null;
-  //                   },
-  //                 ),
-  //                 const SizedBox(height: 15),
-  //                 ProfileTextField(
-  //                   hintText: 'Confirm New Password',
-  //                   isPassword: true,
-  //                   onChanged: (value) => confirmPassword = value,
-  //                   validator: (value) {
-  //                     if (value == null || value.trim().isEmpty) {
-  //                       return 'Please confirm your password';
-  //                     }
-  //                     if (value.trim() != newPassword?.trim()) {
-  //                       return 'Passwords do not match';
-  //                     }
-  //                     return null;
-  //                   },
-  //                 ),
-  //               ],
-  //             ),
-  //           ),
-  //         ),
-  //         actions: [
-  //           TextButton(
-  //             onPressed: () => Navigator.pop(context),
-  //             child: Text(
-  //               'Cancel',
-  //               style: GoogleFonts.comfortaa(
-  //                 color: AppColors.secondaryTextColor,
-  //                 fontSize: 16,
-  //               ),
-  //             ),
-  //           ),
-  //           ElevatedButton(
-  //             onPressed: () {
-  //               if (formKey.currentState!.validate()) {
-  //                 Navigator.pop(context);
-  //               }
-  //             },
-  //             style: ElevatedButton.styleFrom(
-  //               backgroundColor: AppColors.sendMessageColor,
-  //               shape: RoundedRectangleBorder(
-  //                 borderRadius: BorderRadius.circular(20),
-  //               ),
-  //             ),
-  //             child: Text(
-  //               'Change',
-  //               style: GoogleFonts.comfortaa(fontSize: 16, color: Colors.white),
-  //             ),
-  //           ),
-  //         ],
-  //       );
-  //     },
-  //   );
-  // }
+  void _updateProfilePic(BuildContext context) {
+    final profilePicController = TextEditingController();
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          backgroundColor: AppColors.backgroundColor,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+          title: Text(
+            'Change Profile Picture',
+            style: GoogleFonts.comfortaa(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              color: AppColors.textColor,
+            ),
+          ),
+          content: Form(
+            child: TextFormField(
+              controller: profilePicController,
+              keyboardType: TextInputType.text,
+              style: GoogleFonts.comfortaa(color: AppColors.textColor, fontSize: 20),
+              cursorColor: Colors.white,
+              cursorOpacityAnimates: true,
+              enableInteractiveSelection: true,
+              decoration: InputDecoration(
+                contentPadding: const EdgeInsets.symmetric(horizontal: 25, vertical: 15),
+                filled: true,
+                fillColor: AppColors.appBarColor,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(30),
+                  borderSide: const BorderSide(width: 3, color: AppColors.sendMessageColor),
+                ),
+                errorBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(30),
+                  borderSide: const BorderSide(width: 3, color: Colors.red),
+                ),
+                focusedErrorBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(30),
+                  borderSide: const BorderSide(width: 3, color: Colors.red),
+                ),
+                errorStyle: GoogleFonts.comfortaa(color: Colors.red, fontSize: 12),
+                errorMaxLines: 2,
+              ),
+              onTapOutside: (_) {
+                FocusScope.of(context).unfocus();
+              },
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: Text(
+                'Cancel',
+                style: GoogleFonts.comfortaa(
+                  color: AppColors.secondaryTextColor,
+                  fontSize: 16,
+                ),
+              ),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                final newProfilePic = profilePicController.text;
+                final authState = context.read<AuthCubit>().state;
+                if (authState is Authenticated) {
+                  context.read<UserCubit>().updateUserProfile(null, newProfilePic);
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Authentication token not found')),
+                  );
+                }
+                Navigator.pop(context);
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.sendMessageColor,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
+                ),
+              ),
+              child: Text(
+                'Change',
+                style: GoogleFonts.comfortaa(fontSize: 16, color: Colors.white),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
 
-  // Future<void> _loadProfilePic() async {
-  //   final directory = await getApplicationDocumentsDirectory();
-  //   final file = File('${directory.path}/profile_pic.jpg');
-  //   if (await file.exists()) {
-  //     setState(() {
-  //       _profilePicPath = file.path;
-  //     });
-  //   } else {
-  //     debugPrint('No profile picture found');
-  //   }
-  // }
-  //
-  // Future<void> profilePic() async {
-  //   showModalBottomSheet(
-  //     context: context,
-  //     backgroundColor: AppColors.backgroundColor,
-  //     shape: RoundedRectangleBorder(
-  //       borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-  //     ),
-  //     builder: (context) => Column(
-  //       mainAxisSize: MainAxisSize.min,
-  //       children: [
-  //         ListTile(
-  //           leading: Icon(Icons.photo_library, color: AppColors.textColor),
-  //           title: Text(
-  //             'Choose from Gallery',
-  //             style: GoogleFonts.comfortaa(
-  //               color: AppColors.textColor,
-  //               fontSize: 16,
-  //             ),
-  //           ),
-  //           onTap: () {
-  //             Navigator.pop(context);
-  //             _pickImage(ImageSource.gallery);
-  //           },
-  //         ),
-  //         ListTile(
-  //           leading: Icon(Icons.camera_alt, color: AppColors.textColor),
-  //           title: Text(
-  //             'Take a Photo',
-  //             style: GoogleFonts.comfortaa(
-  //               color: AppColors.textColor,
-  //               fontSize: 16,
-  //             ),
-  //           ),
-  //           onTap: () {
-  //             Navigator.pop(context);
-  //             _pickImage(ImageSource.camera);
-  //           },
-  //         ),
-  //         SizedBox(height: 20),
-  //       ],
-  //     ),
-  //   );
-  // }
-  //
-  // Future<void> _pickImage(ImageSource source) async {
-  //   debugPrint('Picking image from $source...');
-  //   try {
-  //     final imagePicked = await _pic.pickImage(source: source);
-  //     if (imagePicked == null) {
-  //       ScaffoldMessenger.of(context).showSnackBar(
-  //         SnackBar(content: Text('No image selected or taken')),
-  //       );
-  //       return;
-  //     }
-  //
-  //     final directory = await getApplicationDocumentsDirectory();
-  //     final file = File('${directory.path}/profile_pic.jpg');
-  //     final newImage = await File(imagePicked.path).copy(file.path);
-  //
-  //     setState(() {
-  //       _profilePicPath = newImage.path;
-  //     });
-  //   } catch (e) {
-  //     ScaffoldMessenger.of(context).showSnackBar(
-  //       SnackBar(content: Text('Failed to pick image: $e')),
-  //     );
-  //   }
-  // }
 }

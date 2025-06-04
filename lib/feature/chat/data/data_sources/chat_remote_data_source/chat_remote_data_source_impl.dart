@@ -93,4 +93,96 @@ class ChatRemoteDataSourceImpl implements ChatRemoteDataSource {
       throw ServerException('Failed to fetch messages: ${response.statusCode}');
     }
   }
+
+  @override
+  Future<void> deleteChat(String chatGroupId) async {
+    String? authToken;
+    try {
+      final user = await authLocalDataSource.getUser();
+      authToken = user.accessToken;
+    } on AppException {
+      throw AuthException('No user found in cache');
+    }
+
+    if (authToken == null) throw AuthException('No token available');
+
+    final response = await client.delete(
+      Uri.parse('$baseUrl/chats/$chatGroupId'),
+      headers: _getHeaders(token: authToken),
+    );
+    print('DelChat response: ${response.body}'); // Debug log
+    if (response.statusCode == 200) {
+      final responseBody = json.decode(response.body);
+      if (responseBody['status'] != 'success') {
+        throw ServerException(responseBody['message'] ?? 'Failed to delete chat');
+      }
+    } else if (response.statusCode == 401) {
+      throw AuthException('Invalid or expired token');
+    }  else if (response.statusCode == 403) {
+      throw AuthException('Forbidden: User is not part of the chat');
+    } else {
+      throw ServerException('Failed to delete chat: ${response.statusCode}');
+    }
+  }
+
+  @override
+  Future<void> deleteMessage(String id) async {
+    String? authToken;
+    try {
+      final user = await authLocalDataSource.getUser();
+      authToken = user?.accessToken;
+    } on AppException {
+      throw AuthException('No user found in cache');
+    }
+
+    if (authToken == null) throw AuthException('No token available');
+
+    final response = await client.delete(
+      Uri.parse('$baseUrl/chats/messages/$id'),
+      headers: _getHeaders(token: authToken),
+    );
+    print("Delete message Url: $baseUrl/chats/messages/$id");
+    print('DelMessage response: ${response.body}');
+    if (response.statusCode == 200) {
+      final responseBody = json.decode(response.body);
+      if (responseBody['status'] != 'success') {
+        throw ServerException(responseBody['message'] ?? 'Failed to delete message');
+      }
+    } else if (response.statusCode == 401) {
+      throw AuthException('Invalid or expired token');
+    }  else if (response.statusCode == 403) {
+      throw AuthException('Forbidden: User is not part of the chat');
+    } else {
+      throw ServerException('Failed to delete message: ${response.statusCode}');
+    }
+  }
+
+  @override
+  Future<void> markMessagesAsRead(String chatGroupId) async {
+    String? authToken;
+    try {
+      final user = await authLocalDataSource.getUser();
+      authToken = user?.accessToken;
+    } on AppException {
+      throw AuthException('No user found in cache');
+    }
+
+    if (authToken == null) throw AuthException('No token available');
+    
+    try {
+      final response = await client.patch(
+        Uri.parse('$baseUrl/chats/markMessagesAsRead').replace(
+          queryParameters: {'id': chatGroupId},),
+        headers: _getHeaders(token: authToken),
+      );
+      print('ChatRemoteDataSource: markMessagesAsRead response: ${response.statusCode}, body: ${response.body}');
+
+      if (response.statusCode != 200) {
+        throw ServerException('Failed to mark messages as read: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('ChatRemoteDataSource: markMessagesAsRead error: $e');
+      throw ServerException(e.toString());
+    }
+  }
 }

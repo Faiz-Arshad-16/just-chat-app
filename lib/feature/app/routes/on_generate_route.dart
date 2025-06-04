@@ -23,34 +23,74 @@ class PageConst {
 }
 
 class OnGenerateRoute {
+  // static Route? route(RouteSettings settings) {
+  //   final name = settings.name;
+  //   final args = settings.arguments;
+  //
+  //   switch (name) {
+  //     case PageConst.splash:
+  //     // When the initialRoute of MaterialApp is set to '/',
+  //     // it will build this SplashScreen first.
+  //     // The SplashScreen itself handles the authentication check and subsequent navigation.
+  //       return MaterialPageRoute(builder: (_) => const SplashScreen());
+  //     case PageConst.login:
+  //       return MaterialPageRoute(builder: (_) => const LoginPage()); // Added const
+  //     case PageConst.signUp:
+  //       return MaterialPageRoute(builder: (_) => const SignupPage()); // Added const
+  //     case PageConst.profile:
+  //       return MaterialPageRoute(builder: (_) => const ProfilePage()); // Added const
+  //     case PageConst.home:
+  //       return MaterialPageRoute(builder: (_) => const HomePage()); // Added const
+  //     case PageConst.chats:
+  //       if (args is ChatEntity) {
+  //         return MaterialPageRoute(builder: (_) => ChatConversationPage(chat: args));
+  //       } else {
+  //         return MaterialPageRoute(builder: (_) => const ErrorPage()); // Added const
+  //       }
+  //     default:
+  //       return MaterialPageRoute(builder: (_) => const ErrorPage()); // Handle unknown routes, Added const
+  //   }
+  // }
   static Route? route(RouteSettings settings) {
     final name = settings.name;
     final args = settings.arguments;
 
+    Widget page;
+
     switch (name) {
       case PageConst.splash:
-      // When the initialRoute of MaterialApp is set to '/',
-      // it will build this SplashScreen first.
-      // The SplashScreen itself handles the authentication check and subsequent navigation.
-        return MaterialPageRoute(builder: (_) => const SplashScreen());
+        page = const SplashScreen();
+        break;
       case PageConst.login:
-        return MaterialPageRoute(builder: (_) => const LoginPage()); // Added const
+        page = const LoginPage();
+        break;
       case PageConst.signUp:
-        return MaterialPageRoute(builder: (_) => const SignupPage()); // Added const
+        page = const SignupPage();
+        break;
       case PageConst.profile:
-        return MaterialPageRoute(builder: (_) => const ProfilePage()); // Added const
+        page = const ProfilePage();
+        break;
       case PageConst.home:
-        return MaterialPageRoute(builder: (_) => const HomePage()); // Added const
+        page = const HomePage();
+        break;
       case PageConst.chats:
         if (args is ChatEntity) {
-          return MaterialPageRoute(builder: (_) => ChatConversationPage(chat: args));
+          page = ChatConversationPage(chat: args);
         } else {
-          return MaterialPageRoute(builder: (_) => const ErrorPage()); // Added const
+          page = const ErrorPage();
         }
+        break;
       default:
-        return MaterialPageRoute(builder: (_) => const ErrorPage()); // Handle unknown routes, Added const
+        page = const ErrorPage();
     }
+
+    return PageRouteBuilder(
+      pageBuilder: (_, __, ___) => page,
+      transitionDuration: Duration.zero,
+      reverseTransitionDuration: Duration.zero,
+    );
   }
+
 }
 
 class ErrorPage extends StatelessWidget {
