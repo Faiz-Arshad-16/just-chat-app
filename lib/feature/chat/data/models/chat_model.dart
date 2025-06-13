@@ -6,6 +6,7 @@ class ChatModel extends ChatEntity {
   const ChatModel({
     required super.chatGroupId,
     required super.partnerName,
+    required super.partnerId,
     super.partnerProfilePic,
     LastMessageModel? super.lastMessage,
     required super.unreadCount,
@@ -16,6 +17,7 @@ class ChatModel extends ChatEntity {
     return ChatModel(
       chatGroupId: json['chatGroupId'] as String,
       partnerName: json['partnerName'] as String,
+      partnerId: json['partnerId'] as String,
       partnerProfilePic: json['partnerProfilePic'] as String?,
       lastMessage:
       lastMessageJson != null ? LastMessageModel.fromJson(lastMessageJson) : null,
@@ -27,6 +29,7 @@ class ChatModel extends ChatEntity {
     return {
       'chatGroupId': chatGroupId,
       'partnerName': partnerName,
+      'partnerId': partnerId,
       'partnerProfilePic': partnerProfilePic,
       'lastMessage': (lastMessage as LastMessageModel?)?.toJson(),
       'unreadCount': unreadCount,
@@ -37,6 +40,7 @@ class ChatModel extends ChatEntity {
     return ChatEntity(
       chatGroupId: chatGroupId,
       partnerName: partnerName,
+      partnerId: partnerId,
       partnerProfilePic: partnerProfilePic,
       lastMessage: lastMessage,
       unreadCount: unreadCount,

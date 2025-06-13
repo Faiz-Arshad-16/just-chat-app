@@ -18,6 +18,8 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final TextEditingController _searchController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController messageController = TextEditingController();
 
   List<ChatEntity> get filteredChats {
     final state = context.read<ChatCubit>().state;
@@ -43,6 +45,8 @@ class _HomePageState extends State<HomePage> {
   @override
   void dispose() {
     _searchController.dispose();
+    emailController.dispose();
+    messageController.dispose();
     super.dispose();
   }
 
@@ -102,7 +106,128 @@ class _HomePageState extends State<HomePage> {
                             borderRadius: BorderRadius.circular(25),
                           ),
                           child: IconButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return AlertDialog(
+                                      backgroundColor: AppColors.backgroundColor,
+                                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                                      title: Text(
+                                        'Start a new chat',
+                                        style: GoogleFonts.comfortaa(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold,
+                                          color: AppColors.textColor,
+                                        ),
+                                      ),
+                                      content: Form(
+                                        child: Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            TextFormField(
+                                              controller: emailController,
+                                              keyboardType: TextInputType.text,
+                                              style: GoogleFonts.comfortaa(color: AppColors.textColor, fontSize: 20),
+                                              cursorColor: Colors.white,
+                                              cursorOpacityAnimates: true,
+                                              enableInteractiveSelection: true,
+                                              decoration: InputDecoration(
+                                                labelText: "Email",
+                                                labelStyle: GoogleFonts.comfortaa(color: AppColors.textColor, fontSize: 20),
+                                                contentPadding: const EdgeInsets.symmetric(horizontal: 25, vertical: 15),
+                                                filled: true,
+                                                fillColor: AppColors.appBarColor,
+                                                border: OutlineInputBorder(
+                                                  borderRadius: BorderRadius.circular(30),
+                                                  borderSide: const BorderSide(width: 3, color: AppColors.sendMessageColor),
+                                                ),
+                                                errorBorder: OutlineInputBorder(
+                                                  borderRadius: BorderRadius.circular(30),
+                                                  borderSide: const BorderSide(width: 3, color: Colors.red),
+                                                ),
+                                                focusedErrorBorder: OutlineInputBorder(
+                                                  borderRadius: BorderRadius.circular(30),
+                                                  borderSide: const BorderSide(width: 3, color: Colors.red),
+                                                ),
+                                                errorStyle: GoogleFonts.comfortaa(color: Colors.red, fontSize: 12),
+                                                errorMaxLines: 2,
+                                              ),
+                                              onTapOutside: (_) {
+                                                FocusScope.of(context).unfocus();
+                                              },
+                                            ),
+                                            const SizedBox(height: 20,),
+                                            TextFormField(
+                                              controller: messageController,
+                                              keyboardType: TextInputType.text,
+                                              style: GoogleFonts.comfortaa(color: AppColors.textColor, fontSize: 20),
+                                              cursorColor: Colors.white,
+                                              cursorOpacityAnimates: true,
+                                              enableInteractiveSelection: true,
+                                              decoration: InputDecoration(
+                                                labelText: "Message",
+                                                labelStyle: GoogleFonts.comfortaa(color: AppColors.textColor, fontSize: 20),
+                                                contentPadding: const EdgeInsets.symmetric(horizontal: 25, vertical: 15),
+                                                filled: true,
+                                                fillColor: AppColors.appBarColor,
+                                                border: OutlineInputBorder(
+                                                  borderRadius: BorderRadius.circular(30),
+                                                  borderSide: const BorderSide(width: 3, color: AppColors.sendMessageColor),
+                                                ),
+                                                errorBorder: OutlineInputBorder(
+                                                  borderRadius: BorderRadius.circular(30),
+                                                  borderSide: const BorderSide(width: 3, color: Colors.red),
+                                                ),
+                                                focusedErrorBorder: OutlineInputBorder(
+                                                  borderRadius: BorderRadius.circular(30),
+                                                  borderSide: const BorderSide(width: 3, color: Colors.red),
+                                                ),
+                                                errorStyle: GoogleFonts.comfortaa(color: Colors.red, fontSize: 12),
+                                                errorMaxLines: 2,
+                                              ),
+                                              onTapOutside: (_) {
+                                                FocusScope.of(context).unfocus();
+                                              },
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      actions: [
+                                        TextButton(
+                                          onPressed: () => Navigator.pop(context),
+                                          child: Text(
+                                            'Cancel',
+                                            style: GoogleFonts.comfortaa(
+                                              color: AppColors.secondaryTextColor,
+                                              fontSize: 16,
+                                            ),
+                                          ),
+                                        ),
+                                        ElevatedButton(
+                                          onPressed: () {
+                                            context.read<ChatCubit>().sendMessage({
+                                              "receiverEmail": emailController.text.trim(),
+                                              "content": messageController.text.trim(),
+                                            });
+                                            Navigator.pop(context);
+                                          },
+                                          style: ElevatedButton.styleFrom(
+                                            backgroundColor: AppColors.sendMessageColor,
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.circular(20),
+                                            ),
+                                          ),
+                                          child: Text(
+                                            'Send',
+                                            style: GoogleFonts.comfortaa(fontSize: 16, color: Colors.white),
+                                          ),
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                );
+                              },
                               icon: const Icon(
                                 Icons.add,
                                 color: AppColors.textColor,

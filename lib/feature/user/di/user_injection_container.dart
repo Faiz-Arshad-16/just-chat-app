@@ -1,5 +1,7 @@
 import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
+import 'package:just_chat_app/feature/chat/data/data_sources/chat_socket_service/chat_socket_service.dart';
+import 'package:just_chat_app/feature/chat/data/data_sources/chat_socket_service/chat_socket_service_impl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../data/data_sources/local_data_source/auth_local_data_source.dart';
 import '../data/data_sources/local_data_source/auth_local_data_source_impl.dart';
@@ -50,4 +52,6 @@ Future<void> initUser(GetIt sl) async {
   // Core
   // ----------------------------------------------------
   sl.registerLazySingleton<NetworkInfo>(() => NetworkInfoImpl(sl()));
+
+  sl.registerLazySingleton<ChatSocketService>(()=>ChatSocketServiceImpl(sl<AuthLocalDataSource>()));
 }

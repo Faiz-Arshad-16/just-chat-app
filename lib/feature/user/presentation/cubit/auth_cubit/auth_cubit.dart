@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:just_chat_app/feature/chat/data/data_sources/chat_socket_service/chat_socket_service.dart';
 import '../../../../../core/usecases/usecase.dart';
 import '../../../domain/usecases/auth_usecases/get_user.dart';
 import '../../../domain/usecases/auth_usecases/sign_in.dart';
@@ -12,12 +13,14 @@ class AuthCubit extends Cubit<AuthState> {
   final SignUp signUpUseCase;
   final SignOut signOutUseCase;
   final GetUser getUserUseCase;
+  final ChatSocketService chatSocketService;
 
   AuthCubit({
     required this.signInUseCase,
     required this.signUpUseCase,
     required this.signOutUseCase,
     required this.getUserUseCase,
+    required this.chatSocketService,
   }) : super(AuthInitial());
 
   Future<void> checkAuthStatus() async {
@@ -26,9 +29,11 @@ class AuthCubit extends Cubit<AuthState> {
     result.fold(
           (failure) {
         emit(Unauthenticated());
+        chatSocketService.disconnect();
       },
           (userEntity) {
         emit(Authenticated(token: userEntity.id, name: userEntity.name));
+        chatSocketService.connect();
       },
     );
   }
@@ -38,9 +43,11 @@ class AuthCubit extends Cubit<AuthState> {
     final result = await signInUseCase(SignInParams(email: email, password: password));
     result.fold(
           (failure) {
+            chatSocketService.disconnect();
         emit(AuthError(message: failure.message));
       },
           (userEntity) {
+            chatSocketService.connect();
         emit(Authenticated(token: userEntity.id, name: userEntity.name));
       },
     );
@@ -55,9 +62,11 @@ class AuthCubit extends Cubit<AuthState> {
     ));
     result.fold(
           (failure) {
+            chatSocketService.disconnect();
         emit(AuthError(message: failure.message));
       },
           (userEntity) {
+            chatSocketService.connect();
         emit(Authenticated(token: userEntity.id, name: userEntity.name));
       },
     );
@@ -71,6 +80,7 @@ class AuthCubit extends Cubit<AuthState> {
         emit(AuthError(message: failure.message));
       },
           (_) {
+            chatSocketService.disconnect();
         emit(Unauthenticated());
       },
     );

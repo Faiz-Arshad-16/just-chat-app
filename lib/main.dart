@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:just_chat_app/feature/chat/data/data_sources/chat_socket_service/chat_socket_service.dart';
 import 'package:just_chat_app/feature/chat/domain/usecases/delete_message.dart';
 import 'package:just_chat_app/feature/chat/domain/usecases/get_all_chats.dart';
 import 'package:just_chat_app/feature/chat/domain/usecases/get_chat.dart';
@@ -47,7 +48,7 @@ class _MyAppState extends State<MyApp> {
       signInUseCase: di.sl<SignIn>(),
       signUpUseCase: di.sl<SignUp>(),
       signOutUseCase: di.sl<SignOut>(),
-      getUserUseCase: di.sl<GetUser>(),
+      getUserUseCase: di.sl<GetUser>(), chatSocketService: di.sl<ChatSocketService>(),
       // localDataSource: di.sl<AuthLocalDataSource>(),
     );
     _userCubit = UserCubit(
@@ -60,7 +61,7 @@ class _MyAppState extends State<MyApp> {
       getChatUseCase: di.sl<GetChat>(),
       deleteChatUseCase: di.sl<DeleteChat>(),
       deleteMessageUseCase: di.sl<DeleteMessage>(),
-      markMessagesAsReadUseCase: di.sl<MarkMessagesAsRead>(),
+      markMessagesAsReadUseCase: di.sl<MarkMessagesAsRead>(), chatSocketService: di.sl<ChatSocketService>(),
     );
   }
 
