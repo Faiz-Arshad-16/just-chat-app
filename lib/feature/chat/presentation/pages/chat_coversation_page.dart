@@ -401,6 +401,10 @@ class _ChatConversationPageState extends State<ChatConversationPage> {
                               ),
                               onPressed: () {
                                 // Send message logic (to be implemented)
+                                context.read<ChatCubit>().sendMessage({
+                                  "content": _messageController.text,
+                                  "recipientId": widget.chat.partnerId,
+                                });
                               },
                             ),
                           ),

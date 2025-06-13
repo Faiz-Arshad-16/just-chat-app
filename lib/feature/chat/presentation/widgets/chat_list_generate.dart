@@ -47,6 +47,8 @@ class ChatListGenerate extends StatelessWidget {
                             const SnackBar(
                                 content: Text('Chat deleted successfully')),
                           );
+                          context.read<ChatCubit>().fetchAllChats();
+
                           Navigator.pop(context); // Close dialog on success
                         }
                       },

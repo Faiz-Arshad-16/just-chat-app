@@ -29,7 +29,7 @@ Future<void> initChat(GetIt sl) async {
     getAllChatsUseCase: sl(),
     getChatUseCase: sl(),
     deleteChatUseCase: sl(),
-    deleteMessageUseCase: sl(), markMessagesAsReadUseCase: sl(),
+    deleteMessageUseCase: sl(), markMessagesAsReadUseCase: sl(), chatSocketService: sl(),
   ));
 
   // ----------------------------------------------------
